@@ -22,4 +22,22 @@ export const AppHeader = () => {
     const [toggleLang, setToggleLang] = useState(
       localStorage.getItem('i18nextLng') || defaultLanguage,
     );
+
+    /**
+   * Currently support only 2 languages. Use "Select" instead of "ActionIcon" if needed.
+   * https://mantine.dev/core/select/
+   */
+  const renderToggleLang = languageConfig.map((langConfig) => (
+    <Tooltip key={langConfig.lang} withArrow label={langConfig.tooltip}>
+      <ActionIcon
+        className="header__lang visibility-hidden"
+        size="xl"
+        radius="xl"
+        onClick={() => setToggleLang(langConfig.lang)}
+        hidden={langConfig.lang === toggleLang}
+      >
+        <img src={langConfig.img} alt={langConfig.alt} />
+      </ActionIcon>
+    </Tooltip>
+  ));
 };
