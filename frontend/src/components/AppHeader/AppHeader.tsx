@@ -40,4 +40,15 @@ export const AppHeader = () => {
       </ActionIcon>
     </Tooltip>
   ));
+  
+  useEffect(() => {
+    i18n.changeLanguage(toggleLang);
+  }, [toggleLang]);
+
+  useEffect(() => {
+    if (i18n.resolvedLanguage === defaultLanguage && toggleLang !== defaultLanguage) {
+      setToggleLang(defaultLanguage);
+    }
+  }, []);
+
 };
