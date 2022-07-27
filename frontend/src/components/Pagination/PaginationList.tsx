@@ -46,5 +46,25 @@ export const PaginationList = <T extends IPaginationData>({
           item: fetchingState.isFetching ? { pointerEvents: 'none', opacity: 0.5 } : undefined,
         }}
       />
+      
+    <Select
+        className="pagination__size"
+        data={paginationConfig.pageSizePool.map((v) => ({
+          label: t('common.pagination.page_size', { size: v }),
+          value: v.toString(),
+        }))}
+        value={(filterForm.values.size || paginationConfig.pageSizePool[0]).toString()}
+        rightSection={<></>}
+        rightSectionWidth={0}
+        styles={{ rightSection: { pointerEvents: 'none' } }}
+        onChange={(pageSize) =>
+          filterForm.setValues((v) => ({
+            ...v,
+            size: safeAnyToNumber(pageSize) || paginationConfig.pageSizePool[0],
+            currentPage: 1,
+          }))
+        }
+      />
+    </div>
   );
 };
