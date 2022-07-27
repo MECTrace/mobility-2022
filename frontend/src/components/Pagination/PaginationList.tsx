@@ -22,5 +22,29 @@ export const PaginationList = <T extends IPaginationData>({
   filterForm: UseForm<T>;
 }) => {
   const { t } = useTranslation();
-  
+
+  return (
+    <div className="pagination d-flex align-center gap-3">
+      <div className="pagination__info">
+        {fetchingState.isFetching ? (
+          <Loader variant="dots" />
+        ) : (
+          renderPaginationInfo(paginationData)
+        )}
+      </div>
+      <Pagination
+        page={filterForm.values.currentPage}
+        total={paginationData?.totalPages || 1}
+        siblings={2}
+        onChange={(p) => {
+          fetchingState.setIsFetching(true);
+          filterForm.setFieldValue('currentPage', p);
+        }}
+        withEdges
+        style={fetchingState.isFetching ? { cursor: 'wait' } : undefined}
+        styles={{
+          item: fetchingState.isFetching ? { pointerEvents: 'none', opacity: 0.5 } : undefined,
+        }}
+      />
+  );
 };
