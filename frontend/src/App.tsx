@@ -44,6 +44,25 @@ function App() {
     defaultValue: defaultColorScheme,
     getInitialValueInEffect: true,
   });
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  useLazyEffect(() => {
+    setIsAFK(isAFK);
+    if (!isAFK) {
+      // This notification appears only when user comebacks after AFK on production or development without strict mode.
+      showNotification({
+        message: (
+          <>
+            {t('common.afk.comeback')} <Loader variant="dots" size="sm" />
+          </>
+        ),
+        icon: <MoodSmile />,
+      });
+    }
+  }, [isAFK]);
+
 }
 
 export default App;
