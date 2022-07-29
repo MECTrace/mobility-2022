@@ -63,23 +63,87 @@ function App() {
     }
   }, [isAFK]);
 
-    /**
+  /**
    * React 18 concurrent does not suppress any logs in the second call to lifecycle functions.
    * Since react mount and unmount, then mount the component again when in strict mode, it seems like a bug with the useEffect, but its work fine on production.
    * ref:
    *      https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects
    *      https://reactjs.org/docs/strict-mode.html#ensuring-reusable-state
    */
-     useEffect(() => {
-        socket.on('connect_error', () => {
-          socket.disconnect();
-        });
-    
-        return () => {
-          socket.off('connect_error');
-        };
-      }, []);    
+  useEffect(() => {
+    socket.on('connect_error', () => {
+      socket.disconnect();
+    });
 
+    return () => {
+      socket.off('connect_error');
+    };
+  }, []);
+
+  return (
+    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={mantineTheme({
+          datesLocale: localStorage.getItem('i18nextLng') || defaultLanguage,
+          colorScheme,
+        })}
+      >
+        <NotificationsProvider>
+          <Suspense fallback={<LoadingOverlay visible />}>
+            <AppShell padding="md" header={<AppHeader />} fixed>
+              <div className={`container h100 ${colorScheme}-mode`}>
+                <Routes>
+                  {routesConfig.map((route, index) => (
+                    <Route
+                      key={`${uID}-${index}`}
+                      path={route.path}
+                      element={<route.component />}
+                    />
+                  ))}
+                </Routes>
+
+                <Modal
+                  opened={isAFK}
+                  title={
+                    <Text
+                      variant="gradient"
+                      gradient={{ from: 'indigo', to: 'cyan' }}
+                      size="xl"
+                      weight={700}
+                    >
+                      {t('common.afk.title')}
+                    </Text>
+                  }
+                  size="lg"
+                  onClose={() => undefined}
+                  withCloseButton={false}
+                  closeOnClickOutside={false}
+                  overlayBlur={3}
+                  centered
+                >
+                  <div className="d-flex gap-3">
+                    <Loader variant="bars" size="sm" />
+                    <div>
+                      <span className="text--pre-line">
+                        {t('common.afk.description', {
+                          afkTime: milisecondsToMinutesRound(afkTimeout),
+                        })}
+                      </span>
+                      <div className="afk__hint mt-2 d-flex gap-1 align-center">
+                        <InfoCircle size={16} /> {t('common.afk.hint')}
+                      </div>
+                    </div>
+                  </div>
+                </Modal>
+              </div>
+            </AppShell>
+          </Suspense>
+        </NotificationsProvider>
+      </MantineProvider>
+    </ColorSchemeProvider>
+  );
 }
 
 export default App;
