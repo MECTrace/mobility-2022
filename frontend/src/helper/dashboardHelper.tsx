@@ -143,3 +143,169 @@ export const handleUpdateThirdCategory = (
   };
   
   
+export const diagramDemoData: IDiagramData[] = [
+    {
+      id: '1',
+      label: 'Center',
+      type: 'input',
+    },
+    {
+      id: '2',
+      label: 'Edge 1',
+      type: 'customNode',
+      source: '1',
+    },
+    {
+      id: '3',
+      type: 'customNode',
+      label: (
+        <strong>
+          <u>RSU 1</u>
+        </strong>
+      ),
+      source: [{ id: '2', edgeAnimated: true, edgeStyle: { stroke: themeRedDark } }],
+    },
+    {
+      id: '4',
+      label: 'OBU 1',
+      type: 'output',
+      source: '3',
+      nodeStatus: ENodeStatus.STOP,
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '5',
+      label: 'OBU 2',
+      type: 'output',
+      source: '3',
+      edgeAnimated: true,
+      connectionFlow: 'reverse',
+      nodeStatus: ENodeStatus.DRIVING,
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '6',
+      label: 'OBU 3',
+      type: 'output',
+      source: '3',
+      nodeStatus: ENodeStatus.DRIVING,
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '7',
+      type: 'customNode',
+      label: (
+        <strong>
+          <u>RSU 2</u>
+        </strong>
+      ),
+      source: [
+        {
+          id: '2',
+          edgeAnimated: true,
+          connectionFlow: 'reverse',
+          edgeStyle: { stroke: themeRedDark },
+        },
+        { id: '3', edgeAnimated: true, edgeStyle: { stroke: themeRedDark } },
+      ],
+      nodeStatus: ENodeStatus.VIRUS_EXCEED,
+    },
+    {
+      id: '8',
+      label: 'OBU 4',
+      type: 'output',
+      source: '7',
+      edgeAnimated: true,
+      connectionFlow: 'reverse',
+      nodeStatus: ENodeStatus.PASS,
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '9',
+      label: 'OBU 5',
+      type: 'output',
+      source: '7',
+      nodeStatus: ENodeStatus.TURN_AROUND,
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '10',
+      label: 'OBU 6',
+      type: 'output',
+      source: '7',
+      nodeStatus: ENodeStatus.STOP,
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '11',
+      label: 'Edge 2',
+      type: 'customNode',
+      source: [{ id: '1' }, { id: '2', edgeAnimated: true, edgeStyle: { stroke: themeRedDark } }],
+    },
+    {
+      id: '12',
+      type: 'customNode',
+      label: (
+        <strong>
+          <u>RSU 3</u>
+        </strong>
+      ),
+      source: [{ id: '11', edgeAnimated: true, edgeStyle: { stroke: themeRedDark } }],
+    },
+    {
+      id: '13',
+      label: 'OBU 7',
+      type: 'output',
+      source: '12',
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '14',
+      label: 'OBU 8',
+      type: 'output',
+      source: '12',
+      edgeAnimated: true,
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '15',
+      label: 'OBU 9',
+      type: 'output',
+      source: '12',
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '16',
+      type: 'customNode',
+      label: (
+        <strong>
+          <u>RSU 4</u>
+        </strong>
+      ),
+      source: [{ id: '11', edgeAnimated: true, edgeStyle: { stroke: themeRedDark } }],
+    },
+    {
+      id: '17',
+      label: 'OBU 10',
+      type: 'output',
+      source: '16',
+      connectionFlow: 'reverse',
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '18',
+      label: 'OBU 11',
+      type: 'output',
+      source: '16',
+      edgeStyle: { stroke: themeRedDark },
+    },
+    {
+      id: '19',
+      label: 'OBU 12',
+      type: 'output',
+      source: '16',
+      edgeAnimated: true,
+      edgeStyle: { stroke: themeRedDark },
+    },
+  ];
+  
