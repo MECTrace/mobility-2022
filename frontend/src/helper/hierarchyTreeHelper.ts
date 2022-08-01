@@ -114,3 +114,22 @@ export const processAutoLayoutDiagram = (initialNodes: Node<NodeData>[], initial
       };
     });
   };
+
+/**
+ *
+ * @param status node status config
+ * @returns {IStatusConfig | undefined} status config.
+ */
+export const getNodeStatusDataByStatus = (status?: number) => {
+    return NodeStatusConfig.find((statusConfig) => statusConfig.status === status);
+  };
+  
+  /**
+   *
+   * @param statusKey key of node status config
+   * @returns {IStatusConfig | undefined} status config.
+   */
+  export const getNodeStatusDataByKey = (statusKey: string) => {
+    return NodeStatusConfig.find((statusConfig) => statusConfig.key === statusKey);
+  };
+  
