@@ -10,3 +10,13 @@ const HttpConfig: AxiosRequestConfig = {
     'Content-Type': 'application/json',
   },
 };
+
+const apiGet = <T>(url: string) =>
+  new Promise<AxiosResponse<T>>((resolve, reject) => {
+    if (!navigator.onLine) {
+      showNotification(findNotiConfig(ErrorCode.ERR_NETWORK));
+      return reject(false);
+    }
+
+    return axiosInstance.get<T>(url, HttpConfig).then(resolve, reject);
+  });
