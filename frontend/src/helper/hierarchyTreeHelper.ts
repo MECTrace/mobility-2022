@@ -75,3 +75,42 @@ export const handleDiagramData = (
   });
   return { initialNodes, initialEdges };
 };
+
+// Handle auto layout/positions for every nodes
+export const processAutoLayoutDiagram = (initialNodes: Node<NodeData>[], initialEdges: Edge[]) => {
+    const skeletonEdges = initialEdges.filter((e) => !e.targetHandle && !e.sourceHandle);
+  
+    const dagreGraph = new dagre.graphlib.Graph(); // compound graph has bugs, since dagrejs is no longer maintained, don't use it.
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
+    dagreGraph.setGraph({});
+    initialNodes.forEach((node) => {
+      dagreGraph.setNode(node.id, { width: defaultNodeWidth, height: defaultNodeHeight });
+  
+      // if need to setParent, enable compound graph (compound: true)
+      // if (node.parentNode) {
+      //   dagreGraph.setParent(node.id, node.parentNode);
+      // }
+    });
+  
+    skeletonEdges.forEach((edge) => {
+      dagreGraph.setEdge(edge.source, edge.target);
+  
+      // for multigraph:
+      // dagreGraph.setEdge({
+      //   v: edge.source,
+      //   w: edge.target,
+      //   name: `dagre-e${edge.source}-${edge.target}-${index}`,
+      // });
+    });
+  
+    dagre.layout(dagreGraph);
+  
+    return initialNodes.map((nodeConfig) => {
+      const { x, y } = dagreGraph.node(nodeConfig.id);
+  
+      return {
+        ...nodeConfig,
+        position: { x: x / 1.2, y: y + defaultNodeHeight },
+      };
+    });
+  };
