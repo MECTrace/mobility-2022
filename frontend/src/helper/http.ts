@@ -20,3 +20,13 @@ const apiGet = <T>(url: string) =>
 
     return axiosInstance.get<T>(url, HttpConfig).then(resolve, reject);
   });
+
+const apiPost = <T>(url: string, payload: any, config?: AxiosRequestConfig) =>
+  new Promise<AxiosResponse<T>>((resolve, reject) => {
+    if (!navigator.onLine) {
+      showNotification(findNotiConfig(ErrorCode.ERR_NETWORK));
+      return reject(false);
+    }
+
+    return axiosInstance.post<T>(url, payload, { ...HttpConfig, ...config }).then(resolve, reject);
+  });
