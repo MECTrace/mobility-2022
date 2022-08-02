@@ -30,3 +30,9 @@ const apiPost = <T>(url: string, payload: any, config?: AxiosRequestConfig) =>
 
     return axiosInstance.post<T>(url, payload, { ...HttpConfig, ...config }).then(resolve, reject);
   });
+
+export const http = {
+  get: apiGet,
+  post: apiPost,
+};
+  
