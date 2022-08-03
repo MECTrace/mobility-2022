@@ -98,3 +98,15 @@ export const getEventInfoTextOnly = (data: IListEvent): string => {
       return '';
   }
 };
+
+export const handleGetValueFromEvent = (data: IListEvent): string => {
+  let content = '';
+  listEventTableConfig.forEach(({ key, label, rawContent }) => {
+    if (rawContent) {
+      content += ` ${label}: ${rawContent(data)},`;
+      return;
+    }
+    content += data[key] ? ` ${label}: ${data[key]},` : '';
+  });
+  return content.trim().slice(0, -1);
+};
