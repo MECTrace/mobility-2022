@@ -71,3 +71,30 @@ export const renderEventInfo = (data: IListEvent, disableTooltip?: boolean) => {
       return <></>;
   }
 };
+
+export const getEventInfoTextOnly = (data: IListEvent): string => {
+  const category = getCategoryConfig(data.category);
+
+  switch (category?.id) {
+    case 1: {
+      const eventInfoData = data.eventInfo as IEventInfoAvailability;
+      const traffic = Math.round((eventInfoData.nic.tx / eventInfoData.nic.rx) * 100);
+
+      return `CPU ${eventInfoData.cpu}%, Memory ${eventInfoData.ram}%, Traffic volume ${traffic}%`;
+    }
+
+    case 2:
+      return t('list_event.info.virus', {
+        fileName: (data.eventInfo as IEventInfoVirus).fileName || '',
+      });
+
+    case 3:
+      return t('list_event.info.communication', {
+        detectionNode: data.detectionNode || '',
+        info: (data.eventInfo as IEventInfoCommunication).info || '',
+      });
+
+    default:
+      return '';
+  }
+};
