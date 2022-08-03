@@ -129,3 +129,23 @@ export const handleListEventPagingReq = (
     size: filterValues.size || paginationConfig.pageSizePool[0],
   };
 };
+
+export const handleListEventReqDebounce = (
+  filterValues: IListEventForm,
+  isScrollLoadMore?: boolean,
+): IListEventReq | undefined => {
+  const [startDate, endDate] = filterValues.dateRange;
+
+  if (startDate !== null && endDate === null) {
+    return undefined;
+  }
+
+  return {
+    lastRecordCreatedTime: isScrollLoadMore ? filterValues.lastRecordCreatedTime : undefined,
+    size: paginationConfig.pageSizePool[1],
+    category: filterValues.categoryID.map((c) => Number(c)),
+    keyword: filterValues.keyword.trim().toLowerCase() || undefined,
+    startTime: startDate ? dayjs(startDate).toISOString() : undefined,
+    endTime: endDate ? dayjs(endDate).endOf('day').toISOString() : undefined,
+  };
+};
