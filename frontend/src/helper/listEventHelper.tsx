@@ -149,3 +149,32 @@ export const handleListEventReqDebounce = (
     endTime: endDate ? dayjs(endDate).endOf('day').toISOString() : undefined,
   };
 };
+
+/**
+ * @param keyword Pre-condition: This string must be normalized.
+ */
+ export const isSocketEventValid = (
+  { keyword, category, startTime, endTime }: IListEventReq,
+  eventData?: IListEvent,
+): boolean => {
+  if (!eventData) {
+    return false;
+  }
+
+  const isValidKeyWord = keyword
+    ? checkStrArrIncludeKeyword(keyword, [
+        eventData.sendNode,
+        eventData.receiveNode,
+        eventData.detectionNode,
+      ])
+    : true;
+  const isValidCategory = category.some((categoryID) => categoryID === eventData.category);
+
+  const isValidDateRange =
+    startTime && endTime
+      ? dayjs(startTime).diff(eventData.createdAt, 'day') >= 0 &&
+        dayjs(endTime).diff(eventData.createdAt, 'day') <= 0
+      : true;
+
+  return isValidKeyWord && isValidCategory && isValidDateRange;
+};
