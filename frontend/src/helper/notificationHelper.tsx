@@ -17,3 +17,43 @@ export const findNotiConfig = (code?: ErrorCode): INotiConfig => {
     message: t(notiConfig.message),
   };
 };
+
+export const showNotiFetch = ({
+  notiID,
+  notiQueue,
+  isSuccess,
+  errCode,
+}: {
+  notiID: string;
+  notiQueue: NotificationProps[];
+  isSuccess?: boolean;
+  errCode?: ErrorCode;
+}) => {
+  if (errCode || isSuccess === false) {
+    updateNotification({
+      id: notiID,
+      ...findNotiConfig(errCode || ErrorCode.ERR),
+    });
+    return;
+  }
+
+  if (isSuccess) {
+    updateNotification({
+      id: notiID,
+      color: 'teal',
+      message: <>{t('common.success')}</>,
+      icon: <Check />,
+    });
+    return;
+  }
+
+  // if there are any notiID noti exist on noti queue, update it instead of create new one.
+  (notiQueue.findIndex(({ id }) => id === notiID) === -1 ? showNotification : updateNotification)({
+    id: notiID,
+    loading: true,
+    title: <>{t('common.communication.fetching.title')}</>,
+    message: <>{t('common.communication.fetching.message')}</>,
+    autoClose: false,
+    disallowClose: true,
+  });
+};
