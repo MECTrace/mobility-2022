@@ -28,3 +28,11 @@ export interface ILanguageConfig {
   alt?: string;
   tooltip?: string;
 }
+
+export interface IPaginationData {
+  hasNext?: boolean;
+  size?: number;
+  currentPage?: number;
+  totalPages?: number;
+  totalRecords?: number;
+}
