@@ -57,3 +57,35 @@ export const showNotiFetch = ({
     disallowClose: true,
   });
 };
+
+export const showNotiSocket = (event?: IListEvent) => {
+  if (!event) {
+    return;
+  }
+
+  if (event.category === 1) {
+    showNotification({
+      ...findNotiConfig(ErrorCode.ERR_EXCEED_THRESHOLD),
+      message: (
+        <div className="noti__exceed">
+          {`${t('common.error.exceed_threshold.message', {
+            nodeName: event.detectionNode,
+            nodeID: event.detectionNodeId,
+          })}`}
+          {renderEventInfo(event, true)}
+        </div>
+      ),
+    });
+  }
+
+  if (event.category === 2) {
+    showNotification({
+      ...findNotiConfig(ErrorCode.ERR_VIRUS),
+      message: `${t('common.error.virus.message', {
+        nodeName: event.detectionNode,
+        nodeID: event.detectionNodeId,
+        fileName: (event.eventInfo as IEventInfoVirus).fileName || '',
+      })}`,
+    });
+  }
+};
