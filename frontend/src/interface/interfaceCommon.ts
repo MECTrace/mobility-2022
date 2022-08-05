@@ -19,3 +19,12 @@ export interface IRoute {
   path: Path;
   component: LazyExoticComponent<() => JSX.Element>;
 }
+
+export type TSupportedLangCode = 'en' | 'ko';
+
+export interface ILanguageConfig {
+  lang: TSupportedLangCode;
+  img: string;
+  alt?: string;
+  tooltip?: string;
+}
