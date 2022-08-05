@@ -36,3 +36,20 @@ export interface IPaginationData {
   totalPages?: number;
   totalRecords?: number;
 }
+
+export interface IPagination {
+  pageSizePool: number[];
+}
+
+export interface IStore extends ISystemStore, IDiagramStore {}
+
+export interface ISystemStore {
+  socket: Socket;
+  isAFK: boolean;
+  setIsAFK: (value: boolean) => void;
+}
+
+export interface IDiagramStore {
+  rawDiagramData: IDiagramData[];
+  setRawDiagramData: (rawDiagramData: IDiagramData[]) => void;
+}
