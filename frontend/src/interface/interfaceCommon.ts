@@ -12,3 +12,10 @@ export interface IRoute {
   path: Path;
   component: LazyExoticComponent<() => JSX.Element>;
 }   
+
+export type TypesOf<T> = T[keyof T];
+
+export interface IRoute {
+  path: Path;
+  component: LazyExoticComponent<() => JSX.Element>;
+}
