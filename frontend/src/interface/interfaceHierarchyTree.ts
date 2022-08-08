@@ -37,3 +37,34 @@ export interface IStatusConfig {
   label: string;
   color?: string;
 }
+
+export interface IDiagramDeviceEDGE {
+  id: string;
+  name: string;
+  listRsu: IDiagramDeviceRSU[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IDiagramDeviceRSU {
+  id: string;
+  name: string;
+  cpu: number;
+  ram: number;
+  rx: number;
+  tx: number;
+  listObu: IDiagramDeviceOBU[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IDiagramDeviceOBU {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IDiagramResData {
+  listEdge: IDiagramDeviceEDGE[];
+}
