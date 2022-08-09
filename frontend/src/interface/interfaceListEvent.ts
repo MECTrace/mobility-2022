@@ -36,3 +36,32 @@ export interface IListEventResData extends IPaginationData {
       rx: number;
     };
   }
+
+  export interface IEventInfoVirus {
+    fileName: string;
+  }
+  
+  export interface IEventInfoCommunication {
+    info: string;
+  }
+  
+  export interface IListEvent {
+    id: string;
+    category: number;
+    datetime?: string;
+    sendNodeType: string;
+    sendNode: string;
+    receiveNodeType?: string;
+    receiveNode?: string;
+    detectionNodeId?: number;
+    detectionNodeType: string;
+    detectionNode: string;
+    status?: string;
+    request?: string;
+    action?: string;
+    eventType?: string;
+    eventInfo: IEventInfoAvailability | IEventInfoVirus | IEventInfoCommunication;
+    createdAt: string;
+    updatedAt?: string;
+  }
+  
