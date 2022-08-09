@@ -16,3 +16,23 @@ export interface IListEventReq {
   startTime?: string;
   endTime?: string;
 }
+
+export interface IListEventResData extends IPaginationData {
+    listEvent: IListEvent[];
+  }
+  
+  export interface IListEventTable {
+    key: keyof IListEvent;
+    label: string;
+    render?: (data: IListEvent) => JSX.Element;
+    rawContent?: (data: IListEvent) => string;
+  }
+  
+  export interface IEventInfoAvailability {
+    cpu: number;
+    ram: number;
+    nic: {
+      tx: number;
+      rx: number;
+    };
+  }
