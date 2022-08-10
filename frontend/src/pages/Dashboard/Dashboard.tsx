@@ -71,5 +71,45 @@ export const Dashboard = () => {
         }, blinkAnimatedTimeout),
       };
     };
+
+    const handleThirdCategoryEvent = (
+        event: IListEvent,
+        currNodeList: IDiagramData[],
+        updateNodeIndex: number,
+      ) => {
+        const relatedNode = currNodeList[updateNodeIndex];
+        const relateNodeDefault = diagramFlattenDefault[updateNodeIndex];
+    
+        const nodeNeedUpdated = handleUpdateThirdCategory(event, relatedNode);
+        if (!nodeNeedUpdated) {
+          return;
+        }
+        const { connection, communication } = nodeNeedUpdated;
+    
+        // Change only related node to connection state
+        setDiagramFlattenData((d) => {
+          const nodeListNow = d.slice();
+          nodeListNow.splice(updateNodeIndex, 1, connection);
+          return [...nodeListNow];
+        });
+    
+        setTimeout(() => {
+          // Change only related node to communication state
+          setDiagramFlattenData((d) => {
+            const nodeListNow = d.slice();
+            nodeListNow.splice(updateNodeIndex, 1, communication);
+            return [...nodeListNow];
+          });
+    
+          setTimeout(() => {
+            // Reset only this node to default state
+            setDiagramFlattenData((d) => {
+              const nodeListNow = d.slice();
+              nodeListNow.splice(updateNodeIndex, 1, relateNodeDefault);
+              return [...nodeListNow];
+            });
+          }, connectionChangeTimeout);
+        }, connectionChangeTimeout);
+      };    
   };
   
