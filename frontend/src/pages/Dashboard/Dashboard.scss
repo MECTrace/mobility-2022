@@ -1,0 +1,36 @@
+.dashboard {
+    &__status {
+      width: 20px;
+      height: 20px;
+  
+      font-size: 0.8rem;
+      line-height: 20px;
+      font-weight: 900;
+      color: $theme-white;
+      text-align: center;
+  
+      &.status--purple {
+        background: var(--theme-purple);
+      }
+    }
+  
+    &__list-event {
+      .mantine-Button-label {
+        font-size: 1.2rem;
+      }
+  
+      svg {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  
+    &__diagram-container {
+      height: 100%;
+      width: calc(100vw - 2rem);
+      position: absolute;
+      right: 1rem;
+      left: calc(-50vw + 50% + 1rem);
+    }
+  }
+  
