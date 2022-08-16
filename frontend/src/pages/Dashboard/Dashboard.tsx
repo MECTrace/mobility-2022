@@ -143,3 +143,34 @@ export const Dashboard = () => {
     }
     handleThirdCategoryEvent(event, diagramFlattenData.slice(), updateNodeIndex);
   };
+
+  const renderStatusExplanation = (statusConfig: IStatusConfig[]) =>
+  statusConfig.map((eachStatus) => (
+    <div key={eachStatus.status} className="d-flex gap-1 align-center">
+      <div
+        className={`dashboard__status circle status--${eachStatus.color} ${
+          eachStatus.className || ''
+        }`}
+      >
+        {eachStatus.icon}
+      </div>{' '}
+      {t(eachStatus.label)}
+    </div>
+  ));
+
+  useEffect(() => {
+    if (isAFK) {
+      // Temporarily disable socket event listeners to reduce unnecessary data transmission and associated logical processes.
+      socket.off(SocketEvents.GET_COMMUNICATION_EVENT);
+      return;
+   }
+
+    socket.on(SocketEvents.GET_COMMUNICATION_EVENT, (event: IListEvent) => {
+     showNotiSocket(event);
+     handleSocketEvent(event);
+   });
+
+    return () => {
+     socket.off(SocketEvents.GET_COMMUNICATION_EVENT);
+   };
+  }, [diagramFlattenData, isAFK]);
