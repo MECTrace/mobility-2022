@@ -113,3 +113,33 @@ export const Dashboard = () => {
       };    
   };
   
+  const handleSocketEvent = (event: IListEvent) => {
+    const eventCategory = event.category;
+
+    if (eventCategory !== 3) {
+      const sendNodeIndex = diagramFlattenData.findIndex(({ id }) => id === event.sendNode);
+      if (sendNodeIndex === -1) {
+        showNotification({
+          ...findNotiConfig(ErrorCode.ERR_SOCKET_DEVICE_NOTFOUND),
+          message: t('common.error.device_notfound.message', { eventID: event.id }),
+        });
+        return;
+      }
+
+      handleVirusThresholdExceedEvent(diagramFlattenData.slice(), sendNodeIndex);
+      return;
+    }
+
+    // If sendNode is an OBU, the node to be updated must be this OBU instead of its parent (RSU).
+    const updateNodeIndex = diagramFlattenData.findIndex(
+      ({ id }) => id === (event.sendNodeType === 'OBU' ? event.sendNode : event.receiveNode),
+    );
+    if (updateNodeIndex === -1) {
+      showNotification({
+        ...findNotiConfig(ErrorCode.ERR_SOCKET_DEVICE_NOTFOUND),
+        message: t('common.error.device_notfound.message', { eventID: event.id }),
+      });
+      return;
+    }
+    handleThirdCategoryEvent(event, diagramFlattenData.slice(), updateNodeIndex);
+  };
