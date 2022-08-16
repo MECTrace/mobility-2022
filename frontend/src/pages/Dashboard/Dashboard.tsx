@@ -174,3 +174,39 @@ export const Dashboard = () => {
      socket.off(SocketEvents.GET_COMMUNICATION_EVENT);
    };
   }, [diagramFlattenData, isAFK]);
+
+    // Pass `diagramDemoData` (dashboardHelper.tsx) to setRawDiagramData to preview all schenario.
+    useEffect(() => setRawDiagramData(diagramDataFlattenDebounced), [diagramDataFlattenDebounced]);
+
+    useEffect(() => {
+      /**
+       * Note: React 18 simulate immediately unmounting and remounting the component whenever a component mounts in strict mode. So this useEffect execute effect twice (call API twice).
+       * We can create a custom useEffect (like useEffectOnce) with a self-check boolean useRef to avoid it on development. Or, use [swr](https://swr.vercel.app/) || ReactQuery to fetch data.
+       *
+       * In this case, I just ignore it. Its work correctly on production.
+       */
+      showNotiFetch({ notiID: NotiID.DASHBOARD_FETCH, notiQueue: notifications });
+  
+      getDiagramData().subscribe({
+        next: ({ data }) => {
+          const flattenData = handleDiagramRawData(data);
+          setDiagramFlattenDefault(flattenData);
+          setDiagramFlattenData(flattenData);
+  
+          showNotiFetch({
+            notiID: NotiID.DASHBOARD_FETCH,
+            notiQueue: notifications,
+            isSuccess: true,
+          });
+        },
+        error: (err) => {
+          console.log(err);
+  
+          showNotiFetch({
+            notiID: NotiID.DASHBOARD_FETCH,
+            notiQueue: notifications,
+            isSuccess: false,
+          });
+        },
+      });
+    }, []);
