@@ -1,0 +1,95 @@
+.list-event {
+    &__back {
+      height: 30px;
+  
+      svg {
+        height: 30px;
+        path {
+          stroke: var(--theme-default);
+          filter: invert(100%);
+        }
+      }
+    }
+  
+    &__filter {
+      position: sticky;
+      top: var(--mantine-header-height);
+      padding: 1rem 0;
+  
+      background-color: var(--theme-black);
+      z-index: 2;
+  
+      .mantine-TextInput-wrapper,
+      .mantine-DateRangePicker-wrapper {
+        width: 25vw;
+      }
+    }
+  
+    &__table {
+      min-height: 100%;
+      thead {
+        background-color: var(--theme-cyan-dark);
+      }
+  
+      tr {
+        position: relative;
+        animation: blink-blue 0.5s 1;
+  
+        .table__event-info {
+          max-width: 12rem;
+        }
+  
+        .table__copy {
+          position: absolute;
+          right: 0.2rem;
+          top: 0.2rem;
+  
+          padding: 0;
+          border: none;
+  
+          opacity: 0;
+          visibility: hidden;
+        }
+  
+        &:hover {
+          .table__copy {
+            animation: 0.5s fadeIn forwards 1.5s;
+          }
+        }
+      }
+  
+      &--no-data {
+        padding: 3rem 0;
+        text-align: center;
+        column-span: 100;
+      }
+    }
+  
+    &__eventType {
+      padding: 2px 2px 4px;
+  
+      background-color: #ffffff1f;
+      border: 1px solid $theme-white;
+      border-radius: 2px;
+  
+      font-size: 12px;
+      white-space: nowrap;
+    }
+  
+    &__event--red {
+      background: var(--theme-brown);
+    }
+  
+    &__no-more {
+      font-size: 0.8rem;
+      opacity: 0.3;
+    }
+  
+    &__scroll-top {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      border-width: 2px;
+    }
+  }
+  
