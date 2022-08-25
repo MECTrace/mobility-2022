@@ -1,0 +1,10 @@
+.dash-animated {
+    svg {
+      line,
+      .path {
+        stroke-width: 4 !important;
+        stroke-dasharray: 10;
+        animation: dash 30s linear infinite reverse;
+      }
+    }
+  }
