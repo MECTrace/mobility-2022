@@ -28,3 +28,24 @@
       background: var(--theme-purple);
     }
   }
+  
+  @keyframes blink-blue {
+    0%,
+    100% {
+      background: var(--theme-default);
+    }
+    50% {
+      background: var(--theme-blue);
+    }
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+  
