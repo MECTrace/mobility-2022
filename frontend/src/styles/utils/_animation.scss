@@ -8,3 +8,23 @@
       }
     }
   }
+  
+.animation-infinite {
+    animation-iteration-count: infinite;
+  }
+  
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
+  
+  @keyframes blink-purple {
+    0%,
+    100% {
+      background: var(--theme-default);
+    }
+    50% {
+      background: var(--theme-purple);
+    }
+  }
