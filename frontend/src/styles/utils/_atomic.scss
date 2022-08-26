@@ -35,3 +35,31 @@
   .d-flex-center {
     @extend .d-flex, .justify-center, .align-center;
   }
+
+.d-flex-c-center {
+    @extend .d-flex, .flex-column, .justify-center, .align-center;
+  }
+  
+  .flex-1 {
+    flex: 1;
+  }
+  
+  .position-relative {
+    position: relative;
+  }
+  
+  .position-absolute {
+    position: absolute;
+  }
+  
+  .sticky-bot {
+    position: sticky;
+    bottom: 0;
+    z-index: -1;
+  }
+  
+  .absolute-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
