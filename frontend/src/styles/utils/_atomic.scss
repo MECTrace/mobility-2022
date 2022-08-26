@@ -11,3 +11,27 @@
 .flex-column {
   flex-direction: column;
 }
+
+.justify-center {
+    justify-content: center;
+  }
+  
+  .justify-between {
+    justify-content: space-between;
+  }
+  
+  .justify-stretch {
+    justify-content: stretch;
+  }
+  
+  .align-center {
+    align-items: center;
+  }
+  
+  .align-stretch {
+    align-items: stretch;
+  }
+  
+  .d-flex-center {
+    @extend .d-flex, .justify-center, .align-center;
+  }
