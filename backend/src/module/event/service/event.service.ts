@@ -32,7 +32,7 @@ export class EventService {
    * @param {QueryPagingEventBodyDto} queryEventBody
    * @returns {Promise<PaginationEventDto>}
    */
-  
+
    async findAllPaging(
     queryEventBody: QueryPagingEventBodyDto,
   ): Promise<PaginationEventDto> {
@@ -80,6 +80,66 @@ export class EventService {
    * Find all event with load more
    * @param {QueryLoadMoreEventBodyDto} queryEventBody
    * @returns {Promise<LoadMoreEventDto>}
+   */
+
+   async findAllLoadMore(
+    queryEventBody: QueryLoadMoreEventBodyDto,
+  ): Promise<LoadMoreEventDto> {
+    const {
+      size,
+      lastRecordCreatedTime,
+      category,
+      keyword,
+      startTime,
+      endTime,
+    } = queryEventBody;
+
+    if (category.length === 0) {
+      return {
+        hasNext: false,
+        listEvent: [],
+      };
+    }
+
+    let queryBuilder = this._createDefaultQueryBuilderFindAll();
+
+    if (lastRecordCreatedTime) {
+      queryBuilder = this._getQueryBuilderForLastRecordCreatedTime(
+        queryBuilder,
+        lastRecordCreatedTime,
+      );
+    }
+
+    queryBuilder = this._updateQueryBuilderFindAllBySearchQuery(queryBuilder, {
+      category,
+      keyword,
+      startTime,
+      endTime,
+    });
+
+    queryBuilder = this._orderByCreatedAt(queryBuilder);
+
+    queryBuilder = queryBuilder.take(size + 1);
+
+    const listEvent = await queryBuilder.getRawMany();
+
+    let hasNext = false;
+    if (listEvent.length > size) {
+      hasNext = true;
+      listEvent.length = size;
+    }
+
+    return {
+      hasNext,
+      listEvent,
+    };
+  }
+
+  /**
+   * Create Event
+   * If category is "Node_Availability_Status_Transfer", update current rsu info
+   * @param {EventDataDto} eventData
+   * @returns {Promise<Event>}
    */
 
 }
