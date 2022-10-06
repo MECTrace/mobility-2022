@@ -336,7 +336,87 @@ export class EventService {
       subConditionQueryForMultipleCategoryInclude1,
       queryBuilder,
     };
-    
+
   }
 
+  /**
+   * Get query builder for searching keyword
+   * @param {SelectQueryBuilder<Event>} queryBuilder
+   * @param {string} keyword
+   * @returns
+   */
+   _getQueryBuilderForKeyWord(
+    queryBuilder: SelectQueryBuilder<Event>,
+    keyword: string,
+  ) {
+    const subConditionQueryForKeyword = (
+      subconditionQuery: WhereExpressionBuilder,
+    ) => {
+      subconditionQuery
+        .where(`"event"."sendNode" iLike :keyword`, {
+          keyword: `%${keyword}%`,
+        })
+        .orWhere(`"event"."receiveNode" iLike :keyword`, {
+          keyword: `%${keyword}%`,
+        })
+        .orWhere(`"event"."detectionNode" iLike :keyword`, {
+          keyword: `%${keyword}%`,
+        });
+    };
+
+    return {
+      subConditionQueryForKeyword,
+      queryBuilder: queryBuilder.andWhere(
+        new Brackets(subConditionQueryForKeyword),
+      ),
+    };
+  }
+
+  /**
+   * Get query builder for searching start time
+   * @param {SelectQueryBuilder<Event>} queryBuilder
+   * @param {string} startTime DateISOString (Exp: 2022-01-01T00:00:00.000Z)
+   * @returns {SelectQueryBuilder<Event>}
+   */
+  _getQueryBuilderForStartTime(
+    queryBuilder: SelectQueryBuilder<Event>,
+    startTime: string,
+  ): SelectQueryBuilder<Event> {
+    return queryBuilder.andWhere(`"event"."createdAt" >= :startTime`, {
+      startTime,
+    });
+  }
+
+  /**
+   * Get query builder for searching end time
+   * @param {SelectQueryBuilder<Event>} queryBuilder
+   * @param {string} endTime DateISOString (Exp: 2022-01-01T00:00:00.000Z)
+   * @returns {SelectQueryBuilder<Event>}
+   */
+  _getQueryBuilderForEndTime(
+    queryBuilder: SelectQueryBuilder<Event>,
+    endTime: string,
+  ): SelectQueryBuilder<Event> {
+    return queryBuilder.andWhere(`"event"."createdAt" <= :endTime`, {
+      endTime,
+    });
+  }
+
+  /**
+   * Get query builder for searching records before lastRecordCreatedTime input
+   * @param {SelectQueryBuilder<Event>} queryBuilder
+   * @param {string} lastRecordCreatedTime DateISOString (Exp: 2022-01-01T00:00:00.000Z)
+   * @returns {SelectQueryBuilder<Event>}
+   */
+  _getQueryBuilderForLastRecordCreatedTime(
+    queryBuilder: SelectQueryBuilder<Event>,
+    lastRecordCreatedTime: string,
+  ) {
+    return queryBuilder.andWhere(
+      `"event"."createdAt" < :lastRecordCreatedTime`,
+      {
+        lastRecordCreatedTime,
+      },
+    );
+  }
 }
