@@ -234,4 +234,109 @@ export class EventService {
     return queryBuilder;
   }
 
+  /**
+   * Get query builder when ordering by createdAt descending
+   * @param {SelectQueryBuilder<Event>} queryBuilder
+   * @returns {SelectQueryBuilder<Event>}
+   */
+   _orderByCreatedAt(
+    queryBuilder: SelectQueryBuilder<Event>,
+  ): SelectQueryBuilder<Event> {
+    return queryBuilder.orderBy('"event"."createdAt"', 'DESC');
+  }
+
+  /**
+   * Get query builder for searching category
+   * @param {SelectQueryBuilder<Event>} queryBuilder
+   * @param {number[]} category
+   * @returns
+   */
+  _getQueryBuilderForCategory(
+    queryBuilder: SelectQueryBuilder<Event>,
+    category: number[],
+  ) {
+    let subConditionQueryForCpuRamNic: {
+      (qb: WhereExpressionBuilder): any;
+      (subconditionQuery: WhereExpressionBuilder): WhereExpressionBuilder;
+      (qb: WhereExpressionBuilder): any;
+    };
+
+    let subConditionOrWhereQueryForMultipleCategoryInclude1: {
+      (qb: WhereExpressionBuilder): any;
+      (subconditionQuery: WhereExpressionBuilder): WhereExpressionBuilder;
+    };
+
+    let subConditionQueryForMultipleCategoryInclude1: {
+      (subconditionQuery: WhereExpressionBuilder): WhereExpressionBuilder;
+      (qb: WhereExpressionBuilder): any;
+    };
+
+    if (
+      category.includes(CategoryEnum.Node_Availability_Status_Transfer_Event)
+    ) {
+      subConditionQueryForCpuRamNic = (
+        subconditionQuery: WhereExpressionBuilder,
+      ) => {
+        const cpuThreshold = this.configService.get<number>('CPU_THRESHOLD');
+        const ramThreshold = this.configService.get<number>('RAM_THRESHOLD');
+        const nicThreshold = this.configService.get<number>('NIC_THRESHOLD');
+        return subconditionQuery
+          .where(`("event"."eventInfo" ->> 'cpu')::integer > ${cpuThreshold}`)
+          .orWhere(`("event"."eventInfo" ->> 'ram')::integer > ${ramThreshold}`)
+          .orWhere(
+            `("event"."eventInfo" -> 'nic' ->> 'tx')::integer / ("event"."eventInfo" -> 'nic' ->> 'rx')::integer > ${nicThreshold}`,
+          );
+      };
+
+      if (category.length === 1) {
+        queryBuilder = queryBuilder
+          .andWhere(
+            `event.category = ${CategoryEnum.Node_Availability_Status_Transfer_Event}`,
+          )
+          .andWhere(new Brackets(subConditionQueryForCpuRamNic));
+      } else {
+        subConditionOrWhereQueryForMultipleCategoryInclude1 = (
+          subconditionQuery: WhereExpressionBuilder,
+        ) => {
+          return subconditionQuery
+            .where(
+              `event.category = ${CategoryEnum.Node_Availability_Status_Transfer_Event}`,
+            )
+            .andWhere(new Brackets(subConditionQueryForCpuRamNic));
+        };
+
+        subConditionQueryForMultipleCategoryInclude1 = (
+          subconditionQuery: WhereExpressionBuilder,
+        ) => {
+          return subconditionQuery
+            .where('event.category in (:...category)', {
+              category: category.filter(
+                (item) =>
+                  item !== CategoryEnum.Node_Availability_Status_Transfer_Event,
+              ),
+            })
+            .orWhere(
+              new Brackets(subConditionOrWhereQueryForMultipleCategoryInclude1),
+            );
+        };
+
+        queryBuilder = queryBuilder.andWhere(
+          new Brackets(subConditionQueryForMultipleCategoryInclude1),
+        );
+      }
+    } else {
+      queryBuilder = queryBuilder.andWhere('event.category in (:...category)', {
+        category,
+      });
+    }
+
+    return {
+      subConditionQueryForCpuRamNic,
+      subConditionOrWhereQueryForMultipleCategoryInclude1,
+      subConditionQueryForMultipleCategoryInclude1,
+      queryBuilder,
+    };
+    
+  }
+
 }
