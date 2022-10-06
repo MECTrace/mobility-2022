@@ -174,4 +174,64 @@ export class EventService {
     });
   }
 
+  /**
+   * Create default query builder find all event
+   * @returns {SelectQueryBuilder<Event>}
+   */
+   _createDefaultQueryBuilderFindAll(): SelectQueryBuilder<Event> {
+    return this.eventRepository
+      .createQueryBuilder('event')
+      .select([
+        '"event"."id"',
+        '"event"."category"',
+        '"event"."sendNode"',
+        '"event"."receiveNode"',
+        '"event"."detectionNode"',
+        '"event"."eventType"',
+        '"event"."status"',
+        '"event"."request"',
+        '"event"."action"',
+        '"event"."eventInfo"',
+        '"event"."createdAt"',
+      ])
+      .where('1 = 1');
+  }
+
+  /**
+   * Update query builder find all by search category, keyword, start time & end time
+   * @param {SelectQueryBuilder<Event>} queryBuilder
+   * @param {QuerySearchEventBodyDto} querySearchEventBody
+   * @returns {SelectQueryBuilder<Event>}
+   */
+  _updateQueryBuilderFindAllBySearchQuery(
+    queryBuilder: SelectQueryBuilder<Event>,
+    querySearchEventBody: QuerySearchEventBodyDto,
+  ): SelectQueryBuilder<Event> {
+    const { category, keyword, startTime, endTime } = querySearchEventBody;
+
+    if (category.length > 0) {
+      queryBuilder = this._getQueryBuilderForCategory(
+        queryBuilder,
+        category,
+      ).queryBuilder;
+    }
+
+    if (keyword) {
+      queryBuilder = this._getQueryBuilderForKeyWord(
+        queryBuilder,
+        keyword,
+      ).queryBuilder;
+    }
+
+    if (startTime) {
+      queryBuilder = this._getQueryBuilderForStartTime(queryBuilder, startTime);
+    }
+
+    if (endTime) {
+      queryBuilder = this._getQueryBuilderForEndTime(queryBuilder, endTime);
+    }
+
+    return queryBuilder;
+  }
+
 }
