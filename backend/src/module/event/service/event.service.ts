@@ -141,5 +141,37 @@ export class EventService {
    * @param {EventDataDto} eventData
    * @returns {Promise<Event>}
    */
+  async create(eventData: EventDataDto): Promise<Event> {
+    if (
+      eventData.category ===
+      CategoryEnum.Node_Availability_Status_Transfer_Event
+    ) {
+      await this.rsuService.update(
+        {
+          name: eventData.detectionNode,
+        },
+        {
+          cpu: eventData.eventInfo.cpu,
+          ram: eventData.eventInfo.ram,
+          tx: eventData.eventInfo.nic.tx,
+          rx: eventData.eventInfo.nic.rx,
+        },
+      );
+    }
+    const event = this.eventRepository.create(eventData);
+    return this.eventRepository.save(event);
+  }
+
+  /**
+   * Delete events that have Node_Availability_Status_Transfer category before input time
+   * @param {string} beforeTime DateISOString (Exp: 2022-01-01T00:00:00.000Z)
+   * @returns {Promise<DeleteResult>}
+   */
+  deleteBeforeTime(beforeTime: string): Promise<DeleteResult> {
+    return this.eventRepository.delete({
+      category: CategoryEnum.Node_Availability_Status_Transfer_Event,
+      createdAt: LessThan(beforeTime),
+    });
+  }
 
 }
