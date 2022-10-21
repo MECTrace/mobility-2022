@@ -49,4 +49,65 @@ describe('CronjobService', () => {
     service = module.get<CronjobService>(CronjobService);
   });
 
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('handleJobClearDataEvent run success with no env config and delete nothing', async () => {
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(new Date(2022, 4, 1));
+    const deleteBeforeTimeSpy = jest.spyOn(
+      fakeEventService,
+      'deleteBeforeTime',
+    );
+    await service.handleJobClearDataEvent();
+    expect(deleteBeforeTimeSpy).toHaveBeenCalledWith(
+      new Date(2022, 1, 1).toISOString(),
+    );
+    expect(deleteBeforeTimeSpy).toHaveReturnedWith(
+      Promise.resolve({
+        raw: [],
+        afftected: 0,
+      }),
+    );
+    jest.useRealTimers();
+  });
+
+  it('handleJobClearDataEvent run success with no env config and delete 1', async () => {
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(new Date(2022, 10, 1));
+    const deleteBeforeTimeSpy = jest.spyOn(
+      fakeEventService,
+      'deleteBeforeTime',
+    );
+    await service.handleJobClearDataEvent();
+    expect(deleteBeforeTimeSpy).toHaveBeenCalledWith(
+      new Date(2022, 7, 1).toISOString(),
+    );
+    expect(deleteBeforeTimeSpy).toHaveReturnedWith(
+      Promise.resolve({
+        raw: listEvent,
+        afftected: 1,
+      }),
+    );
+    jest.useRealTimers();
+  });
+
+  it('handleJobClearDataEvent run success with env config', async () => {
+    fakeConfigService.get = () => {
+      return 2;
+    };
+    jest.useFakeTimers('modern');
+    jest.setSystemTime(new Date(2022, 6, 1));
+    const deleteBeforeTimeSpy = jest.spyOn(
+      fakeEventService,
+      'deleteBeforeTime',
+    );
+    await service.handleJobClearDataEvent();
+    expect(deleteBeforeTimeSpy).toHaveBeenCalledWith(
+      new Date(2022, 4, 1).toISOString(),
+    );
+    jest.useRealTimers();
+  });
+
 });
