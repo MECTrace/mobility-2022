@@ -110,4 +110,15 @@ describe('CronjobService', () => {
     jest.useRealTimers();
   });
 
+  it('handleJobClearDataEvent run fail', async () => {
+    fakeEventService.deleteBeforeTime = () => {
+      throw new Error('Error');
+    };
+    const deleteBeforeTimeSpy = jest.spyOn(
+      fakeEventService,
+      'deleteBeforeTime',
+    );
+    await service.handleJobClearDataEvent();
+    expect(deleteBeforeTimeSpy).toHaveBeenCalledTimes(1);
+  });
 });
