@@ -51,4 +51,34 @@ describe('EventController', () => {
     expect(controller).toBeDefined();
   });
 
+  it('listEventPaging returns an array', async () => {
+    const page = 1;
+    const size = 1;
+    const events = await controller.listEventPaging({
+      page,
+      size,
+    } as QueryPagingEventBodyDto);
+    expect(events.totalRecords).toEqual(10);
+    expect(events.totalPages).toEqual(10);
+    expect(events.currentPage).toEqual(page);
+    expect(events.listEvent.length).toEqual(size);
+  });
+
+  it('listEventLoadMore returns an array with hasNext true', async () => {
+    const size = 1;
+    const events = await controller.listEventLoadMore({
+      size,
+    } as QueryLoadMoreEventBodyDto);
+    expect(events.hasNext).toEqual(true);
+    expect(events.listEvent.length).toEqual(size);
+  });
+
+  it('listEventLoadMore returns an array with hasNext false', async () => {
+    const size = 10;
+    const events = await controller.listEventLoadMore({
+      size,
+    } as QueryLoadMoreEventBodyDto);
+    expect(events.hasNext).toEqual(false);
+    expect(events.listEvent.length).toEqual(size);
+  });
 });
