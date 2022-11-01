@@ -622,7 +622,301 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RsuService } from '../../../modules/node/service/rsu.service';
+import { Brackets, LessThan, Repository, SelectQueryBuilder } from 'typeorm';
+import { EventDataDto } from '../dto/event-data.dto';
+import { QueryLoadMoreEventBodyDto } from '../dto/query-load-more-event-body.dto';
+import { QueryPagingEventBodyDto } from '../dto/query-paging-event-body.dto';
+import { Event } from '../entity/event.entity';
+import { CategoryEnum } from '../enum/category.enum';
+&nbsp;
+@Injectable()
+export class EventService {
+<span class="fstat-no" title="function not covered" >  constructor(</span>
+    @InjectRepository(Event) private <span class="cstat-no" title="statement not covered" >eventRepository: R</span>epository&lt;Event&gt;,
+    private <span class="cstat-no" title="statement not covered" >configService: C</span>onfigService,
+    private <span class="cstat-no" title="statement not covered" >rsuService: R</span>suService,
+  ) {}
+&nbsp;
+<span class="fstat-no" title="function not covered" >  async </span>findAllPaging(queryEventBody: QueryPagingEventBodyDto) {
+    const { page, size, category, keyword, startTime, endTime } =
+<span class="cstat-no" title="statement not covered" >      queryEventBody;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (category.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        totalRecords: 0,
+        totalPages: 0,
+        currentPage: page,
+        listEvent: [],
+      };
+    }
+&nbsp;
+    const offset = <span class="cstat-no" title="statement not covered" >(page - 1) * size;</span>
+&nbsp;
+    let queryBuilder = <span class="cstat-no" title="statement not covered" >this._createDefaultQueryBuilderFindAll();</span>
+<span class="cstat-no" title="statement not covered" >    queryBuilder = this._updateQueryBuilderFindAllBySearchQuery(queryBuilder, {</span>
+      category,
+      keyword,
+      startTime,
+      endTime,
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    queryBuilder = this._orderByCreatedAt(queryBuilder);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    queryBuilder = queryBuilder.skip(offset).take(size);</span>
+&nbsp;
+    const [listEvent, totalRecords] = <span class="cstat-no" title="statement not covered" >await Promise.all([</span>
+      queryBuilder.getRawMany(),
+      queryBuilder.getCount(),
+    ]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      totalRecords,
+      totalPages: Math.ceil(totalRecords / size),
+      currentPage: page,
+      listEvent,
+    };
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  async </span>findAllLoadMore(queryEventBody: QueryLoadMoreEventBodyDto) {
+    const {
+      size,
+      lastRecordCreatedTime,
+      category,
+      keyword,
+      startTime,
+      endTime,
+    } = <span class="cstat-no" title="statement not covered" >queryEventBody;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (category.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        hasNext: false,
+        listEvent: [],
+      };
+    }
+&nbsp;
+    let queryBuilder = <span class="cstat-no" title="statement not covered" >this._createDefaultQueryBuilderFindAll();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (lastRecordCreatedTime) {</span>
+<span class="cstat-no" title="statement not covered" >      queryBuilder = queryBuilder.andWhere(</span>
+        `"event"."createdAt" &lt; :lastRecordCreatedTime`,
+        {
+          lastRecordCreatedTime,
+        },
+      );
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    queryBuilder = this._updateQueryBuilderFindAllBySearchQuery(queryBuilder, {</span>
+      category,
+      keyword,
+      startTime,
+      endTime,
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    queryBuilder = this._orderByCreatedAt(queryBuilder);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    queryBuilder = queryBuilder.take(size + 1);</span>
+&nbsp;
+    const listEvent = <span class="cstat-no" title="statement not covered" >await queryBuilder.getRawMany();</span>
+&nbsp;
+    let hasNext = <span class="cstat-no" title="statement not covered" >false;</span>
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (listEvent.length &gt; size) {</span>
+<span class="cstat-no" title="statement not covered" >      hasNext = true;</span>
+<span class="cstat-no" title="statement not covered" >      listEvent.length = size;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      hasNext,
+      listEvent,
+    };
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  async </span>create(eventData: EventDataDto) {
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (</span>
+      eventData.category ===
+      CategoryEnum.Node_Availability_Status_Transfer_Event
+    ) {
+<span class="cstat-no" title="statement not covered" >      await this.rsuService.update(</span>
+        {
+          name: eventData.detectionNode,
+        },
+        {
+          cpu: eventData.eventInfo.cpu,
+          ram: eventData.eventInfo.ram,
+          tx: eventData.eventInfo.nic.tx,
+          rx: eventData.eventInfo.nic.rx,
+        },
+      );
+    }
+    const event = <span class="cstat-no" title="statement not covered" >this.eventRepository.create(eventData);</span>
+<span class="cstat-no" title="statement not covered" >    return this.eventRepository.save(event);</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  deleteBeforeTime(</span>beforeTime: string) {
+<span class="cstat-no" title="statement not covered" >    return this.eventRepository.delete({</span>
+      category: CategoryEnum.Node_Availability_Status_Transfer_Event,
+      createdAt: LessThan(beforeTime),
+    });
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _createDefaultQueryBuilderFindAll(</span>) {
+<span class="cstat-no" title="statement not covered" >    return this.eventRepository</span>
+      .createQueryBuilder('event')
+      .select([
+        '"event"."id"',
+        '"event"."category"',
+        '"event"."sendNode"',
+        '"event"."receiveNode"',
+        '"event"."detectionNode"',
+        '"event"."eventType"',
+        '"event"."status"',
+        '"event"."request"',
+        '"event"."action"',
+        '"event"."eventInfo"',
+        '"event"."createdAt"',
+      ])
+      .where('1 = 1');
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _updateQueryBuilderFindAllBySearchQuery(</span>
+    queryBuilder: SelectQueryBuilder&lt;Event&gt;,
+    {
+      category,
+      keyword,
+      startTime,
+      endTime,
+    }: {
+      category: number[];
+      keyword: string;
+      startTime: string;
+      endTime: string;
+    },
+  ) {
+<span class="cstat-no" title="statement not covered" >    if (</span>
+      category.includes(CategoryEnum.Node_Availability_Status_Transfer_Event)
+    ) {
+      const cpuThreshold = <span class="cstat-no" title="statement not covered" >this.configService.get&lt;number&gt;('CPU_THRESHOLD');</span>
+      const ramThreshold = <span class="cstat-no" title="statement not covered" >this.configService.get&lt;number&gt;('RAM_THRESHOLD');</span>
+      const nicThreshold = <span class="cstat-no" title="statement not covered" >this.configService.get&lt;number&gt;('NIC_THRESHOLD');</span>
+<span class="cstat-no" title="statement not covered" >      if (category.length === 1) {</span>
+<span class="cstat-no" title="statement not covered" >        queryBuilder = queryBuilder</span>
+          .andWhere(
+            `event.category = ${CategoryEnum.Node_Availability_Status_Transfer_Event}`,
+          )
+          .andWhere(
+            new Brackets(<span class="fstat-no" title="function not covered" >(s</span>ubconditionQuery) =&gt; {
+<span class="cstat-no" title="statement not covered" >              subconditionQuery</span>
+                .where(
+                  `("event"."eventInfo" -&gt;&gt; 'cpu')::integer &gt; ${cpuThreshold}`,
+                )
+                .orWhere(
+                  `("event"."eventInfo" -&gt;&gt; 'ram')::integer &gt; ${ramThreshold}`,
+                )
+                .orWhere(
+                  `("event"."eventInfo" -&gt; 'nic' -&gt;&gt; 'tx')::integer / ("event"."eventInfo" -&gt; 'nic' -&gt;&gt; 'rx')::integer &gt; ${nicThreshold}`,
+                );
+            }),
+          );
+      } else {
+<span class="cstat-no" title="statement not covered" >        queryBuilder = queryBuilder.andWhere(</span>
+          new Brackets(<span class="fstat-no" title="function not covered" >(s</span>ubconditionQuery1) =&gt; {
+<span class="cstat-no" title="statement not covered" >            subconditionQuery1</span>
+              .where('event.category in (:...category)', {
+                category: category.filter(
+<span class="fstat-no" title="function not covered" >                  (i</span>tem) =&gt;
+<span class="cstat-no" title="statement not covered" >                    item !==</span>
+                    CategoryEnum.Node_Availability_Status_Transfer_Event,
+                ),
+              })
+              .orWhere(
+                new Brackets(<span class="fstat-no" title="function not covered" >(s</span>ubconditionQuery2) =&gt; {
+<span class="cstat-no" title="statement not covered" >                  subconditionQuery2</span>
+                    .where(
+                      `event.category = ${CategoryEnum.Node_Availability_Status_Transfer_Event}`,
+                    )
+                    .andWhere(
+                      new Brackets(<span class="fstat-no" title="function not covered" >(s</span>ubconditionQuery3) =&gt; {
+<span class="cstat-no" title="statement not covered" >                        subconditionQuery3</span>
+                          .where(
+                            `("event"."eventInfo" -&gt;&gt; 'cpu')::integer &gt; ${cpuThreshold}`,
+                          )
+                          .orWhere(
+                            `("event"."eventInfo" -&gt;&gt; 'ram')::integer &gt; ${ramThreshold}`,
+                          )
+                          .orWhere(
+                            `("event"."eventInfo" -&gt; 'nic' -&gt;&gt; 'tx')::integer / ("event"."eventInfo" -&gt; 'nic' -&gt;&gt; 'rx')::integer &gt; ${nicThreshold}`,
+                          );
+                      }),
+                    );
+                }),
+              );
+          }),
+        );
+      }
+    } else {
+<span class="cstat-no" title="statement not covered" >      queryBuilder = queryBuilder.andWhere('event.category in (:...category)', {</span>
+        category,
+      });
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (keyword) {</span>
+<span class="cstat-no" title="statement not covered" >      queryBuilder = queryBuilder.andWhere(</span>
+        new Brackets(<span class="fstat-no" title="function not covered" >(s</span>ubconditionQuery) =&gt; {
+<span class="cstat-no" title="statement not covered" >          subconditionQuery</span>
+            .where(`"event"."sendNode" iLike :keyword`, {
+              keyword: `%${keyword}%`,
+            })
+            .orWhere(`"event"."receiveNode" iLike :keyword`, {
+              keyword: `%${keyword}%`,
+            })
+            .orWhere(`"event"."detectionNode" iLike :keyword`, {
+              keyword: `%${keyword}%`,
+            });
+        }),
+      );
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (startTime) {</span>
+<span class="cstat-no" title="statement not covered" >      queryBuilder = queryBuilder.andWhere(</span>
+        `"event"."createdAt" &gt;= :startTime`,
+        {
+          startTime,
+        },
+      );
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (endTime) {</span>
+<span class="cstat-no" title="statement not covered" >      queryBuilder = queryBuilder.andWhere(`"event"."createdAt" &lt;= :endTime`, {</span>
+        endTime,
+      });
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return queryBuilder;</span>
+  }
+&nbsp;
+<span class="fstat-no" title="function not covered" >  _orderByCreatedAt(</span>queryBuilder: SelectQueryBuilder&lt;Event&gt;) {
+<span class="cstat-no" title="statement not covered" >    return queryBuilder.orderBy('"event"."createdAt"', 'DESC');</span>
+  }
+}
+&nbsp;</pre></td></tr></table></pre>
 
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at Mon Jun 13 2022 16:23:27 GMT+0700 (Indochina Time)
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
     </body>
 </html>
     
