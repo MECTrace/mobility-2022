@@ -230,6 +230,88 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// import {
+//   Body,
+//   Controller,
+//   DefaultValuePipe,
+//   Delete,
+//   Get,
+//   Param,
+//   ParseIntPipe,
+//   Patch,
+//   Post,
+//   Put,
+//   Query,
+// } from '@nestjs/common';
+// import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+// import { EdgeDataDto } from '../dto/edge-data.dto';
+// import { PaginationEdgeDto } from '../dto/pagination-edge.dto';
+// import { EdgeService } from '../service/edge.service';
+&nbsp;
+// @ApiTags('Edge')
+// @Controller('edge')
+export class EdgeController {
+  // constructor(private edgeService: EdgeService) {}
+  // @Get()
+  // @ApiOkResponse({
+  //   status: 200,
+  //   description: 'List Edge Response',
+  //   type: PaginationEdgeDto,
+  // })
+  // listEdge(
+  //   @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  //   @Query('size', new DefaultValuePipe(10), ParseIntPipe) size: number,
+  // ) {
+  //   return this.edgeService.findAndCountAll(page, size);
+  // }
+  // @Post()
+  // @ApiOkResponse({
+  //   status: 201,
+  //   description: 'Create one edge',
+  // })
+  // createEdge(@Body() edgeData: EdgeDataDto) {
+  //   return this.edgeService.create(edgeData);
+  // }
+  // @Delete()
+  // @ApiOkResponse({
+  //   status: 200,
+  //   description: 'Delete all Edge',
+  // })
+  // deleteAllEdge() {
+  //   return this.edgeService.deleteAll();
+  // }
+  // @Get(':id')
+  // @ApiOkResponse({
+  //   status: 200,
+  //   description: 'One Edge',
+  // })
+  // oneEdge(@Param('id') id: string) {
+  //   return this.edgeService.findOne(id);
+  // }
+  // @Put('/update/:id')
+  // @ApiOkResponse({
+  //   status: 200,
+  //   description: 'Update one Edge',
+  // })
+  // updatePut(@Body() edgeData: EdgeDataDto, @Param('id') id: string) {
+  //   return this.edgeService.updateOrCreate(edgeData, id);
+  // }
+  // @Patch('/update/:id')
+  // @ApiOkResponse({
+  //   status: 200,
+  //   description: 'Update one Edge',
+  // })
+  // updatePatch(@Body() edgeData: EdgeDataDto, @Param('id') id: string) {
+  //   return this.edgeService.update(edgeData, id);
+  // }
+  // @Delete(':id')
+  // @ApiOkResponse({
+  //   status: 200,
+  //   description: 'Delete one Edge',
+  // })
+  // delete(@Param('id') id: string) {
+  //   return this.edgeService.delete(id);
+  // }
+}
 
     </body>
 </html>
