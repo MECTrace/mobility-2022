@@ -299,13 +299,13 @@ export const diagramDemoData: IDiagramData[] = [
       source: '16',
       edgeStyle: { stroke: themeRedDark },
     },
-    // {
-    //   id: '19',
-    //   label: 'OBU 12',
-    //   type: 'output',
-    //   source: '16',
-    //   edgeAnimated: true,
-    //   edgeStyle: { stroke: themeRedDark },
-    // },
+    {
+      id: '19',
+      label: 'OBU 12',
+      type: 'output',
+      source: '16',
+      edgeAnimated: true,
+      edgeStyle: { stroke: themeRedDark },
+    },
   ];
   
