@@ -21,7 +21,7 @@
         }
       }
     },
-/*    "extends": [
+    "extends": [
       "eslint:recommended",
       "plugin:react/recommended",
       "plugin:@typescript-eslint/recommended",
@@ -39,7 +39,7 @@
       "react",
       "@typescript-eslint"
     ],
-*/    "rules": {
+    "rules": {
       "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
       "react/react-in-jsx-scope": "off",
       "camelcase": "error",
