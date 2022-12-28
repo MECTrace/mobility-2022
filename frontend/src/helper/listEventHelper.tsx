@@ -48,14 +48,14 @@ export const renderEventInfo = (data: IListEvent, disableTooltip?: boolean) => {
     }
     case 2: {
       return (
-        <div className="table__event-info text-ellipsis--2">
-          <>
-            {t('list_event.info.virus', {
-              fileName: (data.eventInfo as IEventInfoVirus).fileName || '',
-            })}
-          </>
-        </div>
-      );
+      //   <div className="table__event-info text-ellipsis--2">
+      //     <>
+      //       {t('list_event.info.virus', {
+      //         fileName: (data.eventInfo as IEventInfoVirus).fileName || '',
+      //       })}
+      //     </>
+      //   </div>
+      // );
     }
     case 3:
       return (
