@@ -11,4 +11,5 @@ import { EventService } from './service/event.service';
   providers: [EventService],
   exports: [EventService],
 })
+
 export class EventModule {}
