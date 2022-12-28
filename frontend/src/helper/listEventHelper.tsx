@@ -66,7 +66,7 @@ export const renderEventInfo = (data: IListEvent, disableTooltip?: boolean) => {
           })}
         </>
       );
-  
+
     default:
       return <></>;
   }
@@ -153,7 +153,7 @@ export const handleListEventReqDebounce = (
 /**
  * @param keyword Pre-condition: This string must be normalized.
  */
- export const isSocketEventValid = (
+export const isSocketEventValid = (
   { keyword, category, startTime, endTime }: IListEventReq,
   eventData?: IListEvent,
 ): boolean => {
