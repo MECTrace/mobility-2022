@@ -51,6 +51,7 @@ function App() {
   useLazyEffect(() => {
     setIsAFK(isAFK);
     if (!isAFK) {
+      // This notification appears only when user comebacks after AFK on production or development without strict mode.
       showNotification({
         message: (
           <>
@@ -62,7 +63,13 @@ function App() {
     }
   }, [isAFK]);
 
-
+  /**
+   * React 18 concurrent does not suppress any logs in the second call to lifecycle functions.
+   * Since react mount and unmount, then mount the component again when in strict mode, it seems like a bug with the useEffect, but its work fine on production.
+   * ref:
+   *      https://reactjs.org/docs/strict-mode.html#detecting-unexpected-side-effects
+   *      https://reactjs.org/docs/strict-mode.html#ensuring-reusable-state
+   */
   useEffect(() => {
     socket.on('connect_error', () => {
       socket.disconnect();
