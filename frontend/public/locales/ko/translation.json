@@ -11,5 +11,19 @@
         "placeholder": "Pick dates range"
       }
     }
+    "dashboard": {
+      "hello_world": "Hello world",
+      "title": "Condition Monitoring Portal",
+      "communication": "Communication",
+      "connection": "Connection",
+      "status": {
+        "stop": "Stop",
+        "driving": "Driving",
+        "turn_around": "Turn around",
+        "pass": "Pass",
+        "exceed": "Exceed threshold",
+        "virus": "Detect virus/Exceed Threshold"
+      }
+    }
   }
   
