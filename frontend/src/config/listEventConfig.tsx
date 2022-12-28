@@ -1,5 +1,5 @@
-import dayjs from 'dayjs';
-import { t } from 'i18next';
+// import dayjs from 'dayjs';
+// import { t } from 'i18next';
 
 import { getCategoryConfig, getEventInfoTextOnly, renderEventInfo } from '@/helper/listEventHelper';
 import { IListEventTable } from '@/interface/interfaceListEvent';
@@ -35,12 +35,12 @@ export const listEventTableConfig: IListEventTable[] = [
   { key: 'sendNode', label: 'Send Node' },
   { key: 'receiveNode', label: 'Receive Node' },
   { key: 'detectionNode', label: 'Detection Node' },
-  {
-    key: 'eventType',
-    label: 'Event type',
-    render: ({ eventType }) =>
-      eventType ? <span className="list-event__eventType">{eventType.toString()}</span> : <></>,
-  },
+  // {
+  //   key: 'eventType',
+  //   label: 'Event type',
+  //   render: ({ eventType }) =>
+  //     eventType ? <span className="list-event__eventType">{eventType.toString()}</span> : <></>,
+  // },
   { key: 'status', label: 'Status' },
   { key: 'request', label: 'Request' },
   { key: 'action', label: 'Action' },
