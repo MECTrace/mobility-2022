@@ -132,7 +132,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
-&nbsp;
+<!-- &nbsp;
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: this.configService.get('DATABASE_TYPE'),
@@ -155,7 +155,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       },
     } as TypeOrmModuleOptions;
   }
-}
+} -->
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
