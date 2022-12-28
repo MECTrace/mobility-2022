@@ -32,8 +32,7 @@ export class EventService {
    * @param {QueryPagingEventBodyDto} queryEventBody
    * @returns {Promise<PaginationEventDto>}
    */
-
-   async findAllPaging(
+  async findAllPaging(
     queryEventBody: QueryPagingEventBodyDto,
   ): Promise<PaginationEventDto> {
     const { page, size, category, keyword, startTime, endTime } =
@@ -81,8 +80,7 @@ export class EventService {
    * @param {QueryLoadMoreEventBodyDto} queryEventBody
    * @returns {Promise<LoadMoreEventDto>}
    */
-
-   async findAllLoadMore(
+  async findAllLoadMore(
     queryEventBody: QueryLoadMoreEventBodyDto,
   ): Promise<LoadMoreEventDto> {
     const {
@@ -178,7 +176,7 @@ export class EventService {
    * Create default query builder find all event
    * @returns {SelectQueryBuilder<Event>}
    */
-   _createDefaultQueryBuilderFindAll(): SelectQueryBuilder<Event> {
+  _createDefaultQueryBuilderFindAll(): SelectQueryBuilder<Event> {
     return this.eventRepository
       .createQueryBuilder('event')
       .select([
@@ -239,7 +237,7 @@ export class EventService {
    * @param {SelectQueryBuilder<Event>} queryBuilder
    * @returns {SelectQueryBuilder<Event>}
    */
-   _orderByCreatedAt(
+  _orderByCreatedAt(
     queryBuilder: SelectQueryBuilder<Event>,
   ): SelectQueryBuilder<Event> {
     return queryBuilder.orderBy('"event"."createdAt"', 'DESC');
@@ -336,7 +334,6 @@ export class EventService {
       subConditionQueryForMultipleCategoryInclude1,
       queryBuilder,
     };
-
   }
 
   /**
@@ -345,7 +342,7 @@ export class EventService {
    * @param {string} keyword
    * @returns
    */
-   _getQueryBuilderForKeyWord(
+  _getQueryBuilderForKeyWord(
     queryBuilder: SelectQueryBuilder<Event>,
     keyword: string,
   ) {
