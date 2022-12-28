@@ -1,11 +1,6 @@
-// 0-255 → '00'-'ff'
 export const decimalToHex = (dec: any) => {
     const tempHex = dec.toString(16);
     return (tempHex.length === 1 ? '0' : '') + tempHex;
-    /**
-     * padStart not compatible with Chrome 54 and older.
-     * return dec.toString(16).padStart(2, '0');
-     */
   };
   
   export const generateUniqueString = () => {
