@@ -14,33 +14,33 @@ import { ReactComponent as LogoDark } from '@/assets/icons/Logo.svg';
 import './AppHeader.scss';
 
 export const AppHeader = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-    const isDarkMode = colorScheme === 'dark';
-  
-    const [toggleLang, setToggleLang] = useState(
-      localStorage.getItem('i18nextLng') || defaultLanguage,
-    );
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const isDarkMode = colorScheme === 'dark';
 
-    /**
+  const [toggleLang, setToggleLang] = useState(
+    localStorage.getItem('i18nextLng') || defaultLanguage,
+  );
+
+  /**
    * Currently support only 2 languages. Use "Select" instead of "ActionIcon" if needed.
    * https://mantine.dev/core/select/
    */
-  // const renderToggleLang = languageConfig.map((langConfig) => (
-  //   <Tooltip key={langConfig.lang} withArrow label={langConfig.tooltip}>
-  //     <ActionIcon
-  //       className="header__lang visibility-hidden"
-  //       size="xl"
-  //       radius="xl"
-  //       onClick={() => setToggleLang(langConfig.lang)}
-  //       hidden={langConfig.lang === toggleLang}
-  //     >
-  //       <img src={langConfig.img} alt={langConfig.alt} />
-  //     </ActionIcon>
-  //   </Tooltip>
-  // ));
-  
+  const renderToggleLang = languageConfig.map((langConfig) => (
+    <Tooltip key={langConfig.lang} withArrow label={langConfig.tooltip}>
+      <ActionIcon
+        className="header__lang visibility-hidden"
+        size="xl"
+        radius="xl"
+        onClick={() => setToggleLang(langConfig.lang)}
+        hidden={langConfig.lang === toggleLang}
+      >
+        <img src={langConfig.img} alt={langConfig.alt} />
+      </ActionIcon>
+    </Tooltip>
+  ));
+
   useEffect(() => {
     i18n.changeLanguage(toggleLang);
   }, [toggleLang]);
