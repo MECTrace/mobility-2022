@@ -70,27 +70,6 @@
         "exceed": "Exceed threshold",
         "virus": "Detect virus/Exceed Threshold"
       }
-    },
-    "list_event": {
-      "title": "List Event",
-      "no_data": "No Data",
-      "category": {
-        "availability_status_tranfer": "Node Availability Status Transfer Event",
-        "virus": "Virus Detection Event",
-        "communication": "Node Communication Event"
-      },
-      "info": {
-        "virus": "File name: {{fileName}}",
-        "communication": "{{detectionNode}} - {{info}}"
-      },
-      "scroll": {
-        "endOfRecords": "No more records."
-      },
-      "export": {
-        "btn_tooltip": "Export data",
-        "file_name": "[Penta]List_events_{{createDate}}",
-        "total": "{{totalRecords}} records"
-      }
     }
   }
   
