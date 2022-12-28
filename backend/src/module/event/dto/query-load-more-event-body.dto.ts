@@ -1,15 +1,16 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Min, IsNumber, IsOptional, IsDateString } from 'class-validator';
-import { QuerySearchEventBodyDto } from './query-search-event-body.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { Event } from '../entity/event.entity';
 
-export class QueryLoadMoreEventBodyDto extends QuerySearchEventBodyDto {
+export class PaginationEventDto {
   @ApiProperty()
-  @IsNumber()
-  @Min(1)
-  size: number;
+  totalRecords: number;
 
-  @ApiPropertyOptional()
-  @IsDateString()
-  @IsOptional()
-  lastRecordCreatedTime: string;
+  @ApiProperty()
+  totalPages: number;
+
+  @ApiProperty()
+  currentPage: number;
+
+  @ApiProperty({ type: Event, isArray: true })
+  listEvent: Event[];
 }
