@@ -1,5 +1,5 @@
-// import { NotificationProps, showNotification, updateNotification } from '@mantine/notifications';
-// import { t } from 'i18next';
+import { NotificationProps, showNotification, updateNotification } from '@mantine/notifications';
+import { t } from 'i18next';
 
 import { notificationConfig } from '@/config/notificationConfig';
 import { ErrorCode } from '@/config/httpConfig/apis';
@@ -7,7 +7,7 @@ import { renderEventInfo } from '@/helper/listEventHelper';
 import { IEventInfoVirus, IListEvent } from '@/interface/interfaceListEvent';
 import { INotiConfig } from '@/interface/interfaceNotification';
 
-// import { Check } from 'tabler-icons-react';
+import { Check } from 'tabler-icons-react';
 
 export const findNotiConfig = (code?: ErrorCode): INotiConfig => {
   const notiConfig = notificationConfig.find((c) => c.code === code) || notificationConfig[0];
@@ -67,13 +67,13 @@ export const showNotiSocket = (event?: IListEvent) => {
     showNotification({
       ...findNotiConfig(ErrorCode.ERR_EXCEED_THRESHOLD),
       message: (
-        // <div className="noti__exceed">
-        //   {`${t('common.error.exceed_threshold.message', {
-        //     nodeName: event.detectionNode,
-        //     nodeID: event.detectionNodeId,
-        //   })}`}
-        //   {renderEventInfo(event, true)}
-        // </div>
+        <div className="noti__exceed">
+          {`${t('common.error.exceed_threshold.message', {
+            nodeName: event.detectionNode,
+            nodeID: event.detectionNodeId,
+          })}`}
+          {renderEventInfo(event, true)}
+        </div>
       ),
     });
   }
