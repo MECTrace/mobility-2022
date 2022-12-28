@@ -15,7 +15,28 @@
     </package>
     <package name="modules.cronjob.service">
       <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
-
+      <file name="cronjob.service.ts" path="D:\DungDM3\Penta\PentaSourceCode\PentaBackend\src\modules\cronjob\service\cronjob.service.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="12" count="5" type="stmt"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="4" type="stmt"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="26" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="31" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+      </file>
     </package>
     <package name="modules.event.controller">
       <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
