@@ -44,25 +44,25 @@ export const handleDiagramData = (
       return;
     }
 
-    if (Array.isArray(eachRecord.source)) {
-      // Multiple Edges/Connections, normal and special connections.
-      eachRecord.source.forEach((sourceConnections, index) => {
-        // The first source connection must be a normal connection (parent-child).
-        initialEdges.push({
-          id: `e${eachRecord.source}-${eachRecord.id}-${index}`,
-          source: sourceConnections.id,
-          target: eachRecord.id,
-          sourceHandle: index === 0 ? undefined : `hs-${sourceConnections.id}`,
-          targetHandle: index === 0 ? undefined : `ht-${eachRecord.id}`,
-          animated: sourceConnections.edgeAnimated,
-          style: {
-            animationDirection: sourceConnections.connectionFlow,
-            ...sourceConnections.edgeStyle,
-          },
-        });
-      });
-      return;
-    }
+    // if (Array.isArray(eachRecord.source)) {
+    //   // Multiple Edges/Connections, normal and special connections.
+    //   eachRecord.source.forEach((sourceConnections, index) => {
+    //     // The first source connection must be a normal connection (parent-child).
+    //     initialEdges.push({
+    //       id: `e${eachRecord.source}-${eachRecord.id}-${index}`,
+    //       source: sourceConnections.id,
+    //       target: eachRecord.id,
+    //       sourceHandle: index === 0 ? undefined : `hs-${sourceConnections.id}`,
+    //       targetHandle: index === 0 ? undefined : `ht-${eachRecord.id}`,
+    //       animated: sourceConnections.edgeAnimated,
+    //       style: {
+    //         animationDirection: sourceConnections.connectionFlow,
+    //         ...sourceConnections.edgeStyle,
+    //       },
+    //     });
+    //   });
+    //   return;
+    // }
 
     // Single normal Edges/Connections
     initialEdges.push({
